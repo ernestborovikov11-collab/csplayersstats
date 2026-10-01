@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBERHUB // CS2 Pro & Streamer Hub</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            900: '#0a0d14',
+                            800: '#121824',
+                            700: '#1a2333',
+                            600: '#25334c',
+                            500: '#34496e',
+                            neon: '#00ffcc',
+                            accent: '#ff0055',
+                            gold: '#ffd700',
+                            purple: '#a855f7'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0a0d14;
+            color: #f3f4f6;
+            font-family: 'Inter', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #121824;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #25334c;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00ffcc;
+        }
+        .cyber-grid {
+            background-image: linear-gradient(to right, rgba(0, 255, 204, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(0, 255, 204, 0.03) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+        .neon-glow {
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.25);
+        }
+        .neon-glow-pink {
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.25);
+        }
+        .cyber-border {
+            clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+        }
+        .cyber-button {
+            clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+            transition: all 0.2s ease;
+        }
+        .cyber-button:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="cyber-grid min-h-screen flex flex-col selection:bg-cyber-neon selection:text-cyber-900">
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 bg-cyber-900/90 backdrop-blur-md border-b border-cyber-700/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-cyber-neon to-blue-600 cyber-border flex items-center justify-center text-cyber-900 font-black text-xl neon-glow">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black tracking-wider text-white flex items-center gap-2">
+                        CYBER<span class="text-cyber-neon">HUB</span>
+                        <span class="text-xs bg-cyber-neon/10 text-cyber-neon border border-cyber-neon/30 px-2 py-0.5 rounded font-mono">CS2 PRO & STREAM</span>
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="hidden md:flex flex-1 max-w-md mx-8">
+                <div class="relative w-full">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-cyber-500">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </span>
+                    <input type="text" id="searchInput" placeholder="Search pro player, streamer, role, or team..." 
+                        class="w-full bg-cyber-800/80 border border-cyber-600/60 rounded-lg pl-10 pr-4 py-2.5 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-cyber-neon focus:ring-1 focus:ring-cyber-neon transition-all">
+                </div>
+            </div>
+
+            <!-- Quick Stats & Actions -->
+            <div class="flex items-center space-x-4">
+                <button onclick="switchTab('rosters')" id="navRosterBtn" class="cyber-button px-4 py-2 bg-cyber-neon text-cyber-900 font-bold text-sm flex items-center gap-2 neon-glow">
+                    <i class="fa-solid fa-users"></i> Rosters
+                </button>
+                <button onclick="switchTab('maps')" id="navMapsBtn" class="cyber-button px-4 py-2 bg-cyber-800 text-gray-300 hover:text-white border border-cyber-600 font-bold text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-map"></i> Map Stats
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Search -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative w-full">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-cyber-500">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+                <input type="text" id="mobileSearchInput" placeholder="Search players, streamers..." 
+                    class="w-full bg-cyber-800/80 border border-cyber-600/60 rounded-lg pl-10 pr-4 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-cyber-neon">
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="relative bg-cyber-800 border-b border-cyber-700/60 py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        <div class="absolute -right-20 -top-20 w-96 h-96 bg-cyber-neon/5 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-20 -bottom-20 w-96 h-96 bg-cyber-accent/5 rounded-full blur-3xl pointer-events-none"></div>
+        
+        <div class="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="max-w-2xl">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-cyber-700/80 border border-cyber-600 text-cyber-neon font-mono text-xs mb-4">
+                    <span class="w-2 h-2 rounded-full bg-cyber-neon animate-pulse"></span> COUNTER-STRIKE 2 DATABASE // VER 2026.1
+                </div>
+                <h2 class="text-4xl sm:text-5xl font-black text-white tracking-tight mb-4">
+                    ELITE <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-neon to-blue-400">PROS</span> & <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-cyber-purple">STREAMERS</span> HUB
+                </h2>
+                <p class="text-gray-400 text-base sm:text-lg mb-6">
+                    Explore comprehensive stats, weapon loadouts, stream links, and tactical map data for the world's finest Counter-Strike 2 competitors and creators. Clean vector avatars, zero clutter.
+                </p>
+                <div class="flex flex-wrap gap-4 text-xs font-mono">
+                    <div class="bg-cyber-900 border border-cyber-700 px-4 py-2.5 rounded-lg flex items-center gap-3">
+                        <i class="fa-solid fa-user-shield text-cyber-neon text-lg"></i>
+                        <div>
+                            <div class="text-gray-400">Pro Competitors</div>
+                            <div class="text-white font-bold text-sm" id="proCount">0 Tracked</div>
+                        </div>
+                    </div>
+                    <div class="bg-cyber-900 border border-cyber-700 px-4 py-2.5 rounded-lg flex items-center gap-3">
+                        <i class="fa-solid fa-video text-pink-500 text-lg"></i>
+                        <div>
+                            <div class="text-gray-400">Popular Streamers</div>
+                            <div class="text-white font-bold text-sm" id="streamerCount">0 Tracked</div>
+                        </div>
+                    </div>
+                    <div class="bg-cyber-900 border border-cyber-700 px-4 py-2.5 rounded-lg flex items-center gap-3">
+                        <i class="fa-solid fa-chart-line text-cyber-gold text-lg"></i>
+                        <div>
+                            <div class="text-gray-400">Active Maps</div>
+                            <div class="text-white font-bold text-sm">7 Competitive</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats Card / Ticker -->
+            <div class="w-full md:w-80 bg-cyber-900/90 border border-cyber-700 p-5 rounded-xl shadow-2xl relative">
+                <div class="flex items-center justify-between mb-4 pb-2 border-b border-cyber-700">
+                    <span class="font-mono text-xs text-cyber-neon font-bold tracking-wider"><i class="fa-solid fa-satellite-dish mr-1.5"></i> LIVE STATUS</span>
+                    <span class="text-xs text-green-400 font-mono flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-ping"></span> ONLINE</span>
+                </div>
+                <div class="space-y-3 text-sm">
+                    <div class="flex justify-between items-center bg-cyber-800/60 p-2.5 rounded border border-cyber-700/50">
+                        <span class="text-gray-300 font-medium">Top Rated Pro</span>
+                        <span class="text-cyber-neon font-mono font-bold">donk (1.38 rating)</span>
+                    </div>
+                    <div class="flex justify-between items-center bg-cyber-800/60 p-2.5 rounded border border-cyber-700/50">
+                        <span class="text-gray-300 font-medium">Top Streamer</span>
+                        <span class="text-pink-400 font-mono font-bold">bratishkin</span>
+                    </div>
+                    <div class="flex justify-between items-center bg-cyber-800/60 p-2.5 rounded border border-cyber-700/50">
+                        <span class="text-gray-300 font-medium">Meta Weapon</span>
+                        <span class="text-cyber-gold font-mono font-bold">AK-47 / AWP</span>
+                    </div>
+                </div>
+                <button onclick="filterCategory('all')" class="w-full mt-4 bg-cyber-800 hover:bg-cyber-700 text-cyber-neon font-mono text-xs py-2 rounded border border-cyber-600 transition-colors text-center block">
+                    VIEW COMPLETE REGISTRY <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Tab 1: Rosters View -->
+        <div id="rostersView" class="space-y-6">
+            <!-- Category Filter Buttons -->
+            <div class="flex flex-wrap items-center justify-between gap-4 bg-cyber-800/60 p-3 rounded-xl border border-cyber-700/60">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="text-xs font-mono text-gray-400 mr-2 uppercase tracking-wider"><i class="fa-solid fa-filter mr-1"></i> Filter:</span>
+                    <button onclick="filterCategory('all')" id="btn-all" class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-cyber-neon text-cyber-900 shadow-md">All Profiles</button>
+                    <button onclick="filterCategory('pro')" id="btn-pro" class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-cyber-900 text-gray-300 hover:text-white border border-cyber-700">Pro Competitors</button>
+                    <button onclick="filterCategory('streamer')" id="btn-streamer" class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-cyber-900 text-gray-300 hover:text-white border border-cyber-700">Streamers</button>
+                    <button onclick="filterCategory('AWP')" id="btn-AWP" class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-cyber-900 text-gray-300 hover:text-white border border-cyber-700">AWP Specialists</button>
+                    <button onclick="filterCategory('Rifler')" id="btn-Rifler" class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-cyber-900 text-gray-300 hover:text-white border border-cyber-700">Riflers</button>
+                </div>
+                <div class="text-xs font-mono text-gray-400">
+                    Showing <span id="visibleCount" class="text-cyber-neon font-bold">0</span> profiles
+                </div>
+            </div>
+
+            <!-- Profiles Grid -->
+            <div id="profilesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Dynamically populated via JavaScript -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="hidden text-center py-16 bg-cyber-800/40 border border-cyber-700/50 rounded-2xl">
+                <div class="text-cyber-500 text-5xl mb-4"><i class="fa-solid fa-user-ninja"></i></div>
+                <h3 class="text-xl font-bold text-white mb-2">No Profiles Found</h3>
+                <p class="text-gray-400 text-sm max-w-md mx-auto mb-6">No pro players or streamers match your active search filter or keyword query.</p>
+                <button onclick="resetFilters()" class="px-4 py-2 bg-cyber-neon text-cyber-900 font-bold text-xs rounded-lg">Reset Filters</button>
+            </div>
+        </div>
+
+        <!-- Tab 2: Map Statistics View -->
+        <div id="mapsView" class="hidden space-y-6">
+            <div class="bg-cyber-800/60 p-6 rounded-2xl border border-cyber-700/60">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 class="text-2xl font-black text-white flex items-center gap-2">
+                            <i class="fa-solid fa-map-location-dot text-cyber-neon"></i> CS2 Competitive Active Duty Map Pool
+                        </h3>
+                        <p class="text-gray-400 text-sm mt-1">Win rates, T/CT side balance, and tactical difficulty metrics for professional matches.</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="mapsGrid">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Profile Details Modal -->
+    <div id="profileModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm hidden">
+        <div class="bg-cyber-800 border border-cyber-600 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative cyber-border">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white bg-cyber-700/80 hover:bg-cyber-600 w-9 h-9 rounded-full flex items-center justify-center transition-colors z-10">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div id="modalContent">
+                <!-- Dynamically injected -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-cyber-900 border-t border-cyber-700/60 py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400 font-mono">
+            <div class="flex items-center gap-2">
+                <div class="w-3 h-3 bg-cyber-neon rounded-full"></div>
+                <span>CYBERHUB CS2 // 2026 PRO & STREAMER DATABASE</span>
+            </div>
+            <div>
+                Optimized for static deployment • Zero photos/real names • Clean vector UI
+            </div>
+        </div>
+    </footer>
+
+    <!-- Application Logic Script -->
+    <script>
+        // Roster Data including pros and streamers specified in the prompt
+        const registryData = [
+            // Pro Players
+            {
+                id: "donk",
+                name: "donk",
+                type: "pro",
+                team: "Team Spirit",
+                role: "Rifler (Entry)",
+                nationality: "RU",
+                rating: 1.38,
+                kd: 1.35,
+                hsPct: 68.4,
+                weapon: "AK-47 / M4A1-S",
+                signaturePlay: "Aggressive banana pressure & multi-frag entry opening",
+                bio: "Widely regarded as one of the most explosive mechanical prodigies in CS2 history with unmatched entry impact.",
+                streamUrl: "https://twitch.tv",
+                accentColor: "from-red-500 to-amber-500"
+            },
+            {
+                id: "m0NESY",
+                name: "m0NESY",
+                type: "pro",
+                team: "G2 Esports",
+                role: "AWP Specialist",
+                nationality: "RU",
+                rating: 1.29,
+                kd: 1.32,
+                hsPct: 34.2,
+                weapon: "AWP / Desert Eagle",
+                signaturePlayer: "Insane aggressive angle peeks and clutch 1v3 conversions",
+                bio: "Exceptional sniper known for lightning-fast reflexes and incredible clutch execution under pressure.",
+                streamUrl: "https://twitch.tv",
+                accentColor: "from-blue-500 to-cyber-neon"
+            },
+            {
+                id: "ZywOo",
+                name: "ZywOo",
+                type: "pro",
+                team: "Team Vitality",
+                role: "AWP / Star Rifler",
+                nationality: "FR",
+                rating: 1.31,
+                kd: 1.36,
+                hsPct: 48.0,
+                weapon: "AWP / AK-47",
+                signaturePlay: "Flawless positioning and game-reading supremacy",
+                bio: "A generational talent whose phenomenal game sense and calm demeanor make him a constant MVP contender.",
+                streamUrl: "https://twitch.tv",
+                accentColor: "from-yellow-500 to-amber-600"
+            },
+            {
+                id: "s1mple",
+                name: "s1mple",
+                type: "pro",
+                team: "Natus Vincere (Inactive/Legend)",
+                role: "AWP / Rifler",
+                nationality: "UA",
+                rating: 1.30,
+                kd: 1.34,
+                hsPct: 42.5,
+                weapon: "AWP / AK-47",
+                signaturePlay: "No-scope mid doors masterclass and legendary 1v5 turnarounds",
+                bio: "The undisputed GOAT of CS:GO transitioning his unmatched mechanical ceiling into CS2 supremacy.",
+                streamUrl: "https://twitch.tv",
+                accentColor: "from-yellow-400 to-blue-500"
+            },
+            {
+                id: "b1t",
+                name: "b1t",
+                type: "pro",
+                team: "Natus Vincere",
+                role: "Rifler (Anchor)",
+                nationality: "UA",
+                rating: 1.12,
+                kd: 1.14,
+                hsPct: 71.2,
+                weapon: "M4A1-S / AK-47",
+                signaturePlay: "Crisp one-tap headshot defenses on site anchor positions",
+                bio: "Legendary headshot percentage machine and rock-solid B-site anchor in championship rosters.",
+                streamUrl: "https://twitch.tv",
+                accentColor: "from-yellow-400 to-cyan-500"
+            },
+            {
+                id: "ropz",
+                name: "ropz",
+                type: "pro",
+                team: "FaZe Clan",
+                role: "Rifler (Lurker)",
+                nationality: "EE",
+                rating: 1.16,
+                kd: 1.21,
+                hsPct: 62.1,
+                weapon: "M4A1-S / AK-47",
+                signaturePlay: "Silent flank execution and clever smoke-wall positioning",
+                bio: "Master of map positioning, timings, and clutch lurking intelligence across all tactical scenarios.",
+                streamUrl: "https://twitch.tv",
+                accentColor: "from-red-600 to-purple-600"
+            },
+            {
+                id: "sh1ro",
+                name: "sh1ro",
+                type: "pro",
+                team: "Team Spirit",
+                role: "AWP Specialist",
+                nationality: "RU",
+                rating: 1.24,
+                kd: 1.38,
+                hsPct: 31.5,
+                weapon: "AWP / USP-S",
+                signaturePlay: "Impeccable passive holding and zero-risk opening picks",
+                bio: "Extremely disciplined sniper who rarely gives away free deaths and excels in late-round situations.",
+                streamUrl: "https://twitch.tv",
+                accentColor: "from-indigo-500 to-cyber-neon"
+            },
+
+            // Streamers & Content Creators
+            {
+                id: "skywhywalker",
+                name: "skywhywalker",
+                type: "streamer",
+                team: "Content Creator",
+                role: "Entertainer / CS2 grinder",
+                nationality: "RU",
+                rating: 1.05,
+                kd: 1.08,
+                hsPct: 55.0,
+                weapon: "Scout / Desert Eagle",
+                signaturePlay: "High energy faceit humiliation and meme-tier operator plays",
+                bio: "Popular internet personality known for intense gameplay streams, unique humor, and loyal community.",
+                streamUrl: "https://twitch.tv/skywhywalker",
+                accentColor: "from-purple-500 to-pink-500"
+            },
+            {
+                id: "deko",
+                name: "deko",
+                type: "streamer",
+                team: "Creator / Ex-Pro",
+                role: "AWP Streamer",
+                nationality: "RU",
+                rating: 1.22,
+                kd: 1.25,
+                hsPct: 35.0,
+                weapon: "AWP",
+                signaturePlay: "Calm analytical flick shots with chill music vibes",
+                bio: "Famous for his deadpan streaming style and lethal sniper accuracy in high-elo matchmaking.",
+                streamUrl: "https://twitch.tv/deko",
+                accentColor: "from-cyan-400 to-blue-600"
+            },
+            {
+                id: "ct0m",
+                name: "ct0m",
+                type: "streamer",
+                team: "Content Creator",
+                role: "Rifler / Streamer",
+                nationality: "RU",
+                rating: 1.10,
+                kd: 1.12,
+                hsPct: 60.2,
+                weapon: "AK-47",
+                signaturePlay: "Dynamic premier matchmaking carries and squad communication",
+                bio: "Engaging creator focusing on CS2 ranking adventures, coaching, and interactive community sessions.",
+                streamUrl: "https://twitch.tv",
+                accentColor: "from-emerald-400 to-teal-600"
+            },
+            {
+                id: "kelien",
+                name: "kelien",
+                type: "streamer",
+                team: "Community Creator",
+                role: "Rifler / Analyst",
+                nationality: "RU",
+                rating: 1.08,
+                kd: 1.05,
+                hsPct: 58.4,
+                weapon: "M4A1-S",
+                signaturePlay: "Deep tactical breakdown and casual premier queue dominance",
+                bio: "Dedicated streamer delivering consistent entertainment, high-tier gameplay, and viewer interaction.",
+                streamUrl: "https://twitch.tv",
+                accentColor: "from-blue-400 to-indigo-600"
+            },
+            {
+                id: "m3wsu",
+                name: "m3wsu",
+                type: "streamer",
+                team: "Content Creator",
+                role: "Highlight Creator",
+                nationality: "RU",
+                rating: 1.14,
+                kd: 1.16,
+                hsPct: 63.1,
+                weapon: "AK-47",
+                signaturePlay: "Insane pre-fires and fast-paced duels",
+                bio: "Energetic streamer known for sharp mechanical aim and entertaining chat interactions.",
+                streamUrl: "https://twitch.tv",
+                accentColor: "from-pink-500 to-rose-600"
+            },
+            {
+                id: "strogo",
+                name: "strogo",
+                type: "streamer",
+                team: "Top Creator",
+                role: "Showmatch Captain",
+                nationality: "RU",
+                rating: 1.11,
+                kd: 1.10,
+                hsPct: 59.0,
+                weapon: "Galil AR / AK-47",
+                signaturePlay: "Hilarious team coordination and chaotic showmatch plays",
+                bio: "One of the most recognizable CIS gaming personalities, organizing massive streamer tournaments.",
+                streamUrl: "https://twitch.tv/strogo",
+                accentColor: "from-amber-400 to-orange-600"
+            },
+            {
+                id: "buster",
+                name: "buster",
+                type: "streamer",
+                team: "Ex-Pro / Streamer",
+                role: "Rifler / IRL & CS2",
+                nationality: "RU",
+                rating: 1.15,
+                kd: 1.18,
+                hsPct: 56.5,
+                weapon: "AK-47",
+                signaturePlay: "Clutch support rounds and massive community event hosting",
+                bio: "Former professional competitor turned superstar streamer, famous for collaborative streams and high production.",
+                streamUrl: "https://twitch.tv/buster",
+                accentColor: "from-blue-500 to-purple-600"
+            },
+            {
+                id: "bratishkin",
+                name: "bratishkin",
+                type: "streamer",
+                team: "Mega Streamer",
+                role: "Team Captain",
+                nationality: "RU",
+                rating: 1.02,
+                kd: 0.98,
+                hsPct: 50.1,
+                weapon: "FAMAS / AK-47",
+                signaturePlay: "Tactical shouting and hilarious tactical fails",
+                bio: "Top-tier CIS streaming icon who frequently hosts epic CS2 creator showdowns and community events.",
+                streamUrl: "https://twitch.tv/bratishkin",
+                accentColor: "from-red-500 to-pink-600"
+            },
+            {
+                id: "shadowkek",
+                name: "shadowkek",
+                type: "streamer",
+                team: "Creator",
+                role: "Variety / CS2",
+                nationality: "RU",
+                rating: 0.98,
+                kd: 0.95,
+                hsPct: 45.0,
+                weapon: "P90 / Negev",
+                signaturePlay: "Unconventional rush strategies and hilarious reactions",
+                bio: "Beloved internet personality bringing comedic chaos and fun moments to tactical shooter streams.",
+                streamUrl: "https://twitch.tv",
+                accentColor: "from-green-400 to-emerald-600"
+            },
+            {
+                id: "dangerlyoha",
+                name: "dangerlyoha",
+                type: "streamer",
+                team: "Content Creator",
+                role: "Rifler",
+                nationality: "RU",
+                rating: 1.07,
+                kd: 1.06,
+                hsPct: 54.2,
+                weapon: "AK-47",
+                signaturePlay: "Aggressive site takes and clutch moments",
+                bio: "Dedicated CS2 content creator sharing gameplay tips, Premier grind, and fun community matches.",
+                streamUrl: "https://twitch.tv",
+                accentColor: "from-yellow-400 to-red-500"
+            },
+            {
+                id: "murzofix",
+                name: "murzofix",
+                type: "streamer",
+                team: "Stream Team",
+                role: "AWP / Rifler",
+                nationality: "RU",
+                rating: 1.13,
+                kd: 1.15,
+                hsPct: 57.8,
+                weapon: "AWP",
+                signaturePlay: "Sharp angles and consistent sniper support",
+                bio: "Talented streamer focused on high-level competitive matches and engaging community interaction.",
+                streamUrl: "https://twitch.tv",
+                accentColor: "from-cyan-500 to-blue-700"
+            },
+            {
+                id: "kindly",
+                name: "kindly",
+                type: "streamer",
+                team: "Creator",
+                role: "Rifler",
+                nationality: "RU",
+                rating: 1.12,
+                kd: 1.14,
+                hsPct: 61.0,
+                weapon: "M4A1-S",
+                signaturePlay: "Smart defensive positioning and clutch retakes",
+                bio: "Popular creator known for friendly community atmosphere, regular tournaments, and solid gameplay.",
+                streamUrl: "https://twitch.tv",
+                accentColor: "from-purple-400 to-indigo-600"
+            }
+        ];
+
+        // Active Duty Maps Data
+        const mapsData = [
+            { name: "Mirage", code: "de_mirage", tWin: "49.2%", ctWin: "50.8%", popularity: "94%", desc: "The definitive tactical battleground. Balanced A/B sites requiring precise utility execution." },
+            { name: "Dust II", code: "de_dust2", tWin: "52.1%", ctWin: "47.9%", popularity: "89%", desc: "Iconic open-mid map favoring explosive T-side entries and AWP duels." },
+            { name: "Inferno", code: "de_inferno", tWin: "46.5%", ctWin: "53.5%", popularity: "86%", desc: "Tight choke points, banana control battles, and complex smoke setups." },
+            { name: "Nuke", code: "de_nuke", tWin: "44.8%", ctWin: "55.2%", popularity: "78%", desc: "Vertical multi-level facility demanding rapid rotations and outside yard control." },
+            { name: "Anubis", code: "de_anubis", tWin: "51.4%", ctWin: "48.6%", popularity: "72%", desc: "Open canal routes and fast water skirmishes creating chaotic tactical pacing." },
+            { name: "Ancient", code: "de_ancient", tWin: "47.8%", ctWin: "52.2%", popularity: "75%", desc: "Jungle archaeological site with critical mid control and explosive cave fights." },
+            { name: "Vertigo", code: "de_vertigo", tWin: "48.9%", ctWin: "51.1%", popularity: "65%", desc: "Skyscraper construction zone favoring fast ramp plays and vertical sound cues." }
+        ];
+
+        let activeFilter = 'all';
+        let searchQuery = '';
+
+        // Initialize App on load
+        window.addEventListener('DOMContentLoaded', () => {
+            updateCounts();
+            renderProfiles();
+            renderMaps();
+
+            // Event Listeners for Search
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                searchQuery = e.target.value.toLowerCase();
+                renderProfiles();
+            });
+            document.getElementById('mobileSearchInput').addEventListener('input', (e) => {
+                searchQuery = e.target.value.toLowerCase();
+                document.getElementById('searchInput').value = searchQuery;
+                renderProfiles();
+            });
+        });
+
+        function updateCounts() {
+            const pros = registryData.filter(p => p.type === 'pro').length;
+            const streamers = registryData.filter(p => p.type === 'streamer').length;
+            document.getElementById('proCount').innerText = `${pros} Competitors`;
+            document.getElementById('streamerCount').innerText = `${streamers} Creators`;
+        }
+
+        // Tab Switching
+        function switchTab(tab) {
+            const rostersView = document.getElementById('rostersView');
+            const mapsView = document.getElementById('mapsView');
+            const navRosterBtn = document.getElementById('navRosterBtn');
+            const navMapsBtn = document.getElementById('navMapsBtn');
+
+            if (tab === 'rosters') {
+                rostersView.classList.remove('hidden');
+                mapsView.classList.add('hidden');
+                navRosterBtn.className = "cyber-button px-4 py-2 bg-cyber-neon text-cyber-900 font-bold text-sm flex items-center gap-2 neon-glow";
+                navMapsBtn.className = "cyber-button px-4 py-2 bg-cyber-800 text-gray-300 hover:text-white border border-cyber-600 font-bold text-sm flex items-center gap-2";
+            } else {
+                rostersView.classList.add('hidden');
+                mapsView.classList.remove('hidden');
+                navMapsBtn.className = "cyber-button px-4 py-2 bg-cyber-neon text-cyber-900 font-bold text-sm flex items-center gap-2 neon-glow";
+                navRosterBtn.className = "cyber-button px-4 py-2 bg-cyber-800 text-gray-300 hover:text-white border border-cyber-600 font-bold text-sm flex items-center gap-2";
+            }
+        }
+
+        // Filter Categories
+        function filterCategory(cat) {
+            activeFilter = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.className = "cat-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-cyber-900 text-gray-300 hover:text-white border border-cyber-700";
+            });
+            const activeBtn = document.getElementById(`btn-${cat}`);
+            if (activeBtn) {
+                activeBtn.className = "cat-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-cyber-neon text-cyber-900 shadow-md";
+            }
+            renderProfiles();
+        }
+
+        function resetFilters() {
+            searchQuery = '';
+            document.getElementById('searchInput').value = '';
+            document.getElementById('mobileSearchInput').value = '';
+            filterCategory('all');
+        }
+
+        // Render Profiles Grid
+        function renderProfiles() {
+            const grid = document.getElementById('profilesGrid');
+            const emptyState = document.getElementById('emptyState');
+            
+            const filtered = registryData.filter(item => {
+                const matchesCat = activeFilter === 'all' || 
+                    item.type === activeFilter || 
+                    item.role.toLowerCase().includes(activeFilter.toLowerCase());
+                
+                const matchesSearch = searchQuery === '' || 
+                    item.name.toLowerCase().includes(searchQuery) ||
+                    item.team.toLowerCase().includes(searchQuery) ||
+                    item.role.toLowerCase().includes(searchQuery) ||
+                    item.weapon.toLowerCase().includes(searchQuery);
+
+                return matchesCat && matchesSearch;
+            });
+
+            document.getElementById('visibleCount').innerText = filtered.length;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            grid.innerHTML = filtered.map(item => `
+                <div onclick="openProfileModal('${item.id}')" class="bg-cyber-800/80 hover:bg-cyber-800 border border-cyber-700 hover:border-cyber-neon/60 rounded-xl p-5 cursor-pointer transition-all duration-300 group flex flex-col justify-between cyber-border relative overflow-hidden shadow-lg">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br ${item.accentColor} opacity-5 rounded-bl-full pointer-events-none group-hover:opacity-15 transition-opacity"></div>
+                    
+                    <div>
+                        <!-- Header badge -->
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider ${item.type === 'pro' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/30' : 'bg-pink-500/10 text-pink-400 border border-pink-500/30'}">
+                                ${item.type === 'pro' ? '<i class="fa-solid fa-trophy mr-1"></i> Pro Player' : '<i class="fa-solid fa-video mr-1"></i> Streamer'}
+                            </span>
+                            <span class="text-xs font-mono text-gray-400 bg-cyber-900 px-2 py-0.5 rounded border border-cyber-700">
+                                ${item.nationality}
+                            </span>
+                        </div>
+
+                        <!-- Name & Team -->
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br ${item.accentColor} flex items-center justify-center text-white font-black text-lg shadow-inner">
+                                ${item.name.substring(0, 2).toUpperCase()}
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-black text-white group-hover:text-cyber-neon transition-colors">${item.name}</h4>
+                                <p class="text-xs text-gray-400 font-medium">${item.team}</p>
+                            </div>
+                        </div>
+
+                        <!-- Role & Weapon -->
+                        <div class="space-y-1.5 mb-4 text-xs font-mono">
+                            <div class="flex justify-between text-gray-400 bg-cyber-900/50 px-2.5 py-1.5 rounded">
+                                <span>Role:</span>
+                                <span class="text-gray-200 font-semibold">${item.role}</span>
+                            </div>
+                            <div class="flex justify-between text-gray-400 bg-cyber-900/50 px-2.5 py-1.5 rounded">
+                                <span>Favorite:</span>
+                                <span class="text-cyber-neon font-semibold">${item.weapon}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats Footer -->
+                    <div class="pt-3 border-t border-cyber-700/60 flex items-center justify-between text-xs font-mono">
+                        <div>
+                            <span class="text-gray-500">RATING</span>
+                            <div class="text-white font-bold text-sm">${item.rating}</div>
+                        </div>
+                        <div>
+                            <span class="text-gray-500">K/D</span>
+                            <div class="text-cyan-400 font-bold text-sm">${item.kd}</div>
+                        </div>
+                        <div>
+                            <span class="text-gray-500">HS %</span>
+                            <div class="text-pink-400 font-bold text-sm">${item.hsPct}%</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render Map Stats Grid
+        function renderMaps() {
+            const grid = document.getElementById('mapsGrid');
+            grid.innerHTML = mapsData.map(map => `
+                <div class="bg-cyber-900/90 border border-cyber-700 rounded-xl p-5 hover:border-cyber-neon/50 transition-all">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-lg font-black text-white flex items-center gap-2">
+                            <i class="fa-solid fa-map text-cyber-neon"></i> ${map.name}
+                        </h4>
+                        <span class="text-xs font-mono bg-cyber-800 text-cyber-neon px-2.5 py-1 rounded border border-cyber-700">Popularity: ${map.popularity}</span>
+                    </div>
+                    <p class="text-xs text-gray-400 mb-4 leading-relaxed">${map.desc}</p>
+                    <div class="space-y-2 mb-4">
+                        <div class="flex justify-between text-xs font-mono">
+                            <span class="text-gray-400">T Win Rate (${map.tWin})</span>
+                            <span class="text-orange-400 font-bold">Terrorists</span>
+                        </div>
+                        <div class="w-full bg-cyber-800 h-2 rounded-full overflow-hidden flex">
+                            <div class="bg-orange-500 h-full" style="width: ${map.tWin}"></div>
+                            <div class="bg-blue-500 h-full" style="width: ${map.ctWin}"></div>
+                        </div>
+                        <div class="flex justify-between text-xs font-mono">
+                            <span class="text-gray-400">CT Win Rate (${map.ctWin})</span>
+                            <span class="text-blue-400 font-bold">Counter-Terrorists</span>
+                        </div>
+                    </div>
+                    <div class="text-[10px] font-mono text-gray-500 bg-cyber-800/50 p-2 rounded border border-cyber-700/50 flex items-center justify-between">
+                        <span>MAP CODE: ${map.code}</span>
+                        <span class="text-green-400"><i class="fa-solid fa-circle-check"></i> Active Duty</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Modal Handlers
+        function openProfileModal(id) {
+            const item = registryData.find(p => p.id === id);
+            if (!item) return;
+
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = `
+                <div class="p-6 sm:p-8">
+                    <div class="flex items-center space-x-4 mb-6">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br ${item.accentColor} flex items-center justify-center text-white font-black text-2xl shadow-lg">
+                            ${item.name.substring(0, 2).toUpperCase()}
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="text-xs font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider ${item.type === 'pro' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/30' : 'bg-pink-500/10 text-pink-400 border border-pink-500/30'}">
+                                    ${item.type === 'pro' ? 'Pro Competitor' : 'Popular Streamer'}
+                                </span>
+                                <span class="text-xs font-mono text-gray-400 bg-cyber-900 px-2 py-0.5 rounded border border-cyber-700">${item.nationality}</span>
+                            </div>
+                            <h2 class="text-2xl sm:text-3xl font-black text-white">${item.name}</h2>
+                            <p class="text-sm text-gray-400">${item.team}</p>
+                        </div>
+                    </div>
+
+                    <p class="text-sm text-gray-300 bg-cyber-900/60 p-4 rounded-xl border border-cyber-700 mb-6 leading-relaxed">
+                        ${item.bio}
+                    </p>
+
+                    <div class="grid grid-cols-3 gap-3 mb-6">
+                        <div class="bg-cyber-900/80 p-3.5 rounded-xl border border-cyber-700 text-center">
+                            <span class="text-[10px] font-mono text-gray-400 block mb-1">RATING</span>
+                            <span class="text-lg font-black text-white">${item.rating}</span>
+                        </div>
+                        <div class="bg-cyber-900/80 p-3.5 rounded-xl border border-cyber-700 text-center">
+                            <span class="text-[10px] font-mono text-gray-400 block mb-1">K/D RATIO</span>
+                            <span class="text-lg font-black text-cyan-400">${item.kd}</span>
+                        </div>
+                        <div class="bg-cyber-900/80 p-3.5 rounded-xl border border-cyber-700 text-center">
+                            <span class="text-[10px] font-mono text-gray-400 block mb-1">HEADSHOT %</span>
+                            <span class="text-lg font-black text-pink-400">${item.hsPct}%</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 mb-8 text-xs font-mono">
+                        <div class="flex justify-between bg-cyber-900/50 p-3 rounded-lg border border-cyber-700/50">
+                            <span class="text-gray-400">Primary Role:</span>
+                            <span class="text-white font-bold">${item.role}</span>
+                        </div>
+                        <div class="flex justify-between bg-cyber-900/50 p-3 rounded-lg border border-cyber-700/50">
+                            <span class="text-gray-400">Primary Weapon:</span>
+                            <span class="text-cyber-neon font-bold">${item.weapon}</span>
+                        </div>
+                        <div class="flex justify-between bg-cyber-900/50 p-3 rounded-lg border border-cyber-700/50">
+                            <span class="text-gray-400">Signature Playstyle:</span>
+                            <span class="text-gray-200 font-medium text-right max-w-[250px]">${item.signaturePlay}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <a href="${item.streamUrl}" target="_blank" class="flex-1 bg-cyber-neon hover:bg-cyber-neon/90 text-cyber-900 font-bold py-3 px-4 rounded-xl text-sm flex items-center justify-center gap-2 transition-all shadow-lg neon-glow">
+                            <i class="fa-brands fa-twitch text-lg"></i> Watch Stream / VODs
+                        </a>
+                        <button onclick="closeModal()" class="px-6 py-3 bg-cyber-700 hover:bg-cyber-600 text-white font-bold rounded-xl text-sm">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('profileModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('profileModal').classList.add('hidden');
+        }
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            const profileModal = document.getElementById('profileModal');
+            if (event.target === profileModal) closeModal();
+        }
+    </script>
+</body>
+</html>
